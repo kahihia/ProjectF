@@ -1,0 +1,598 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+html,body{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  margin: 0 auto;
+  overflow-x: hidden;
+  //overflow-y: auto;
+}
+div, span, object, iframe, img, table, caption, thead, tbody,
+tfoot, tr, tr, td, article, aside, canvas, details, figure, hgroup, menu,
+nav, footer, header, section, summary, mark, audio, video {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, address, cit, code,
+del, dfn, em, ins, q, samp, small, strong, sub, sup, b, i, hr, dl, dt, dd,
+ol, ul, li, fieldset, legend, label {
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  margin: 0;
+  padding: 0;
+}
+article, aside, canvas, figure, figure img, figcaption, hgroup,
+footer, header, nav, section, audio, video {
+  display: block;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  caption, th, td {
+    text-align: left;
+    vertical-align: middle;
+  }
+}
+ol, ul,li{
+  list-style: none;
+}
+a{
+  text-decoration: none;
+  -webkit-touch-callout: none;
+  outline: none;
+}
+a img {
+  border: 0;
+}
+:focus { outline: 0; text-decoration: none; }
+i, address, caption, cite, code, dfn, em, strong, th, var { font-style: normal }
+h1, h2, h3, h4, h5, h6 { font-size: 100%; font-weight: normal }
+input, textarea { -webkit-user-select: text; -ms-user-select: text; user-select: text; -webkit-appearance: none; }
+input:focus, select:focus, textarea:focus, button:focus { outline: none; }
+input[type="text"], input[type="password"], input[type="search"], input[type="tel"], input[type="number"], input[type="email"], input[type="url"], textarea { -webkit-appearance: none; border: 1px solid; border-radius: 0; }
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance:none;
+}//去掉input在type="number"时右边的上下箭头
+//显示隐藏
+.hide { display: none !important;}
+.show { display: block !important;}
+
+.borderBox{ box-sizing: border-box;}
+/*浮动*/
+._left{float: left}
+._right{float: right}
+.clearfix:after{
+  content: "";
+  display: block;
+  clear: both;
+}
+/*定义滚动条*/
+.scrollbar::-webkit-scrollbar{
+  width:0;
+  height: 0;
+}
+//单行...
+.ellipsis{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mixin-cliptext(@line:2){
+  overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: @line;
+  -webkit-box-orient: vertical;
+}
+//图片
+.mixin-img{
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+//圆形头像
+.radius_img(@width,@height){
+  width: @width;
+  height: @height;
+  img{
+    .mixin-borderRadius(50%);
+  }
+}
+.align_center{
+  text-align: center;
+}
+//borderRadius
+.mixin-borderRadius(@radius:6px) {
+  -webkit-border-radius:@radius;
+  -moz-border-radius: @radius;
+  -ms-border-radius: @radius;
+  -o-border-radius: @radius;
+  border-radius: @radius;
+}
+//定位上下左右居中
+.mixin-center{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+//定位上下居中
+.mixin-centerTop {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+//定位左右居中
+.mixin-centerLeft {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.mixin-right{
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+//设置按钮
+.mixin-setButton(@width,@height:auto,@color,@bgcolor,@size,@bg){
+  width:@width;
+  height: @height;
+  color: @color;
+  background-color: @bgcolor;
+  font-size:@size ;
+  &:active{
+    background-color:@bg;
+  }
+}
+.delete_line{
+  text-decoration: line-through;
+}
+.padding32{
+  padding:0 32px;
+}
+.padding40{
+  padding:0 40px;
+}
+//字体颜色
+@W1:#fff;
+@W2:#f9f9f9;
+@W3:#f4f5f6;
+@W4:#fefefe;
+@Y1:#fff3ae;
+@Y2:#ffe035;
+@Y3:#fac917;
+@Y4:#fff9d4;
+@G1:#252525;
+@G2:#909090;
+@G3:#363636;
+@G4:#959595;
+@G5:#53d499;
+@G6:#8f8f8f;
+@B6:#4c87d8;
+@G7:#ebebeb;
+@R1:#f34336;
+@sign:#ff5c5c;
+@special:#f44336;
+@input_in:rgba(255, 255, 255, 0.1);
+@G_status:#0fc07b;
+//背景颜色
+@bg-a:#f4f3f0;
+@bg-b:#f9f9f9;
+@bg-c:#fff;
+@bg-d:#ffe035;
+@bg-e:#f5f5f5;
+@bg-f:#d4d4d4;
+@bg-e:#eee;
+@bg-g:#ddd;
+@bg-h:#ffc1c1;
+@bg-i:#fff3ae;
+@bg-j:#d3d3d3;
+  @bg-k:#252525;
+@hot:#ff5c5c;
+@voucher-b:#efd43e;
+@log_bg:#fff3ae;
+@sign_bg:#ffd733;
+//边框颜色
+@border_a:#c3c3c3;
+@border_b:#cccccc;
+@border_c:#e4e4e4;
+@border_d:rgba(107, 127, 158, 0.2);
+@border_e:#909090;
+@border_f:#d5d5d5;
+@border_g:#fff;
+@border_h:#f6f6f6;
+//按钮颜色
+@btn_bg:#252525;
+@btn_bg1:#53d499;
+@btn_bg2:#0a0205;
+//字体
+@font-face{
+  font-family: 'HYK2gj';
+  src:url('../font/HYK2gj/HYK2gj.ttf')  format('truetype'), /* Safari, Android, iOS */
+  url('../font/HYK2gj/HYK2gj.svg#HYK2gj') format('svg'); /* Legacy iOS */
+}
+@font-face{
+  font-family: 'SourceRegular';
+  src:url('../font/SourceHanSansCN-Regular/SourceHanSansCN-Regular.ttf')  format('truetype'), /* Safari, Android, iOS */
+  url('../font/SourceHanSansCN-Regular/SourceHanSansCN-Regular.svg#SourceRegular') format('svg'); /* Legacy iOS */
+}
+@font-face{
+  font-family: 'SourceBold';
+  src:url('../font/SourceHanSansCN-Bold/SourceHanSansCN-Bold.ttf')  format('truetype'), /* Safari, Android, iOS */
+  url('../font/SourceHanSansCN-Bold/SourceHanSansCN-Bold.svg#SourceBold') format('svg'); /* Legacy iOS */
+}
+.warn{
+  font-family: "SourceRegular";
+  color: @R1;
+  font-size:24px;
+}
+//大标题
+.t-a{
+  font-family: "HYK2gj";
+  color: @G1;
+  font-size: 58px;
+}
+.t-a-a{
+  font-family: "HYK2gj";
+  color: @G3;
+  font-size: 60px;
+}
+.t_b{
+  font-family: "SourceBold";
+  color: @G3;
+  font-size: 40px;
+}
+.t_c{
+  font-family: "SourceRegular";
+  color: @G3;
+  font-size: 40px;
+}
+.t_d{
+  font-family: "SourceRegular";
+  color: @W1;
+  font-size: 36px;
+}
+.t_e{
+  font-family: "SourceRegular";
+  color: @G1;
+  font-size: 30px;
+}
+.t_f{
+  font-family: "SourceRegular";
+  color: @G1;
+  font-size: 60px;
+}
+.t_g{
+  font-family: "SourceRegular";
+  color: @W1;
+  font-size: 40px;
+}
+.t_h{
+  font-family: "SourceRegular";
+  color: @G1;
+  font-size: 42px;
+}
+//小标题
+.t-b-a{
+  font-family: "SourceBold";
+  color: @G1;
+  font-size: 26px;
+}
+.t-b-b{
+  font-family: "SourceBold";
+  color: @G3;
+  font-size: 26px;
+}
+.t-b-c{
+  font-family: "SourceBold";
+  color: @G3;
+  font-size: 30px;
+}
+.t-b-d{
+  font-family: "SourceBold";
+  color: @G3;
+  font-size: 28px;
+}
+//input标题
+.input_title{
+  color: @W1;
+  font-size: 30px;
+}
+.green_btn{
+  color: @W1;
+  font-size: 18px;
+}
+.cell_title{
+  color: @G3;
+  font-size: 30px;
+}
+//input内容
+.input_cont{
+  color: @W1;
+  font-size: 30px;
+}
+//内容
+.c-a{
+  font-family: "SourceRegular";
+  color: @G1;
+  font-size:24px;
+}
+.c-Ba{
+  font-family: "SourceBold";
+  color: @G3;
+  font-size:26px;
+}
+.c-Bb{
+  font-family: "SourceBold";
+  color: @Y3;
+  font-size:30px;
+}
+.c-Bc{
+  font-family: "SourceRegular";
+  color: @G1;
+  font-size:22px;
+}
+.c-Bd{
+  font-family: "SourceRegular";
+  color: @G1;
+  font-size:28px;
+}
+.c-Bf{
+  font-family: "SourceRegular";
+  color: @G1;
+  font-size:36px;
+}
+//次内容
+.c-b{
+  font-family: "SourceRegular";
+  color: @G2;
+  font-size:24px;
+}
+.c-c{
+  font-family: "SourceRegular";
+  color: @G1;
+  font-size:18px;
+}
+.c-d{
+  font-family: "SourceRegular";
+  color: @G4;
+  font-size:24px;
+}
+.c-e{
+  font-family: "SourceRegular";
+  color: @G3;
+  font-size:24px;
+}
+.c-f{
+  font-family: "SourceRegular";
+  color: @G2;
+  font-size:18px;
+}
+.c-g{
+  font-family: "SourceRegular";
+  color: @G_status;
+  font-size:18px;
+}
+.c-h{
+  font-family: "SourceRegular";
+  color: @G1;
+  font-size:20px;
+}
+.c-j{
+  font-family: "SourceRegular";
+  color: @G2;
+  font-size:22px;
+}
+.c-k{
+  font-family: "SourceRegular";
+  color: @Y3;
+  font-size:24px;
+}
+.c-l{
+  font-family: "SourceRegular";
+  color: @W1;
+  font-size:22px;
+}
+.c-m{
+  font-family: "SourceRegular";
+  color: @W1;
+  font-size:24px;
+}
+.c-n{
+  font-family: "SourceRegular";
+  color: @G4;
+  font-size:18px;
+}
+.c-o{
+  font-family: "SourceRegular";
+  color: @G2;
+  font-size: 26px;
+}
+.c-p{
+  font-family: "SourceRegular";
+  color: @G4;
+  font-size: 26px;
+}
+.c-q{
+  font-family: "SourceRegular";
+  color: @G5;
+  font-size: 24px;
+}
+.c-r{
+  font-family: "SourceRegular";
+  color: @G2;
+  font-size: 20px;
+}
+.c-s{
+  font-family: "SourceRegular";
+  color: @G5;
+  font-size: 22px;
+}
+.c-t{
+  font-family: "SourceRegular";
+  color: @G2;
+  font-size: 28px;
+}
+.c-u{
+  font-family: "SourceRegular";
+  color: @W3;
+  font-size: 24px;
+}
+.c-v{
+  font-family: "SourceRegular";
+  color: @G5;
+  font-size: 30px;
+}
+.c-w{
+  font-family: "SourceRegular";
+  color: @Y2;
+  font-size:24px;
+}
+.c-x{
+  font-family: "SourceRegular";
+  color: @G2;
+  font-size:30px;
+}
+//标志
+.d-a{
+  font-family: "SourceRegular";
+  color: @G1;
+  font-size: 14px;
+}
+//特殊
+.e_a{
+  font-family: "SourceRegular";
+  color: @special;
+  font-size: 24px;
+}
+.e_b{
+  font-family: "SourceRegular";
+  color: @special;
+  font-size: 20px;
+}
+.e_c{
+  font-family: "SourceRegular";
+  color: @hot;
+  font-size: 18px;
+}
+.e_d{
+  font-family: "SourceRegular";
+  color: @W4;
+  font-size: 20px;
+}
+.e_f{
+  font-family: "SourceRegular";
+  color: @special;
+  font-size: 28px;
+}
+.e_h{
+  font-family: "SourceRegular";
+  color: @sign;
+  font-size: 36px;
+}
+.e_i{
+  font-family: "SourceRegular";
+  color: @sign;
+  font-size: 30px;
+}
+.p_a{
+  font-family: "SourceRegular";
+  color: @B6;
+  font-size: 24px;
+}
+.line{
+  width: 100%;
+  font-size: 26px;
+}
+.list_style{
+  background-color: @bg-c;
+  box-shadow: 0 0 15px 0
+  rgba(0, 1, 1, 0.05);
+  .mixin-borderRadius(12px)
+}
+.notice{
+  .position-vertical-demo {
+    background-color: @bg-h;
+    color: @sign;
+    font-size: 24px;
+    padding: 20px 32px;
+  }
+}
+.null_data{
+  position: relative;
+  height: 500px;
+}
+.mark {
+  right: -24px;
+  display: block;
+  width: 90px;
+  background: @hot;
+  color: @bg-c;
+  font-size: 24px;
+  text-align: center;
+  padding: 8px 0;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+.circle{
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  background-color: @hot;
+  .mixin-borderRadius(50%);
+}
+.radio{
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 18px;
+  cursor: pointer;
+}
+.radio input{
+  display: none;
+}
+.radio .radio-bg{
+  display: inline-block;
+  height: 40px;
+  width: 40px;
+  padding: 0;
+  border-radius: 100%;
+  vertical-align: top;
+  box-shadow: 0 1px 15px rgba(0, 0, 0, 0.1) inset, 0 1px 4px rgba(0, 0, 0, 0.1) inset, 1px -1px 2px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.radio .radio-on{
+  display: none;
+}
+.radio input:checked + span.radio-on{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 40px;
+  width: 40px;
+  line-height: 40px;
+  background-color: @sign;
+  text-align: center;
+  border-radius: 100%;
+  transform: translate(-50%, -50%);
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+.radio input:checked + span.radio-on:after{
+  content:"\2714";
+  color: #fff;
+  transform: scaleX(1);
+  font-size: 26px;
+  text-align: center;
+}

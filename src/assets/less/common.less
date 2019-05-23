@@ -1,0 +1,213 @@
+@switch-not-checked-bg-color:#eee;
+@switch-checked-bg-color:#ffe035;
+@switch-checked-btn-color:#fff;
+.hint{
+  .weui-dialog{
+    max-width: 500px;
+    border-radius: 10px;
+    .weui-dialog__hd{
+      .weui-dialog__title{
+        font-size: 30px;
+        color: #f44336;
+      }
+    }
+    .weui-dialog__bd{
+      font-size: 24px;
+      color: #252525;
+    }
+    .weui-dialog__ft{
+      font-size: 28px;
+      .weui-dialog__btn_default{
+        padding: 10px 0;
+        color: #909090;
+      }
+      .weui-dialog__btn_primary{
+        padding: 10px 0;
+        color: #53d499;
+      }
+    }
+  }
+}
+body{
+  .dp-header{
+    .dp-item{
+      font-size: 26px;
+
+    }
+    .dp-item.dp-right{
+      color: #ffe035;
+    }
+  }
+  .dp-content{
+    .scroller-item{
+      font-size: 26px;
+      height: 50px;
+      line-height: 50px;
+    }
+    .dp-item{
+      .scroller-component{
+        .scroller-indicator{
+          height: 50px;
+        }
+      }
+    }
+  }
+  .vux-popup-picker-container{
+    .vux-popup-header{
+      font-size: 24px;
+      .vux-popup-header-right{
+        color: #ffe035;
+      }
+    }
+    .vux-picker{
+      .scroller-indicator{
+        height: 50px;
+        line-height: 50px;
+      }
+      .scroller-item{
+        height: 50px;
+        line-height: 50px;
+        font-size: 24px;
+      }
+    }
+  }
+}
+.voucher_wrap{
+  .vux-popup-dialog{
+    background-color: #fff;
+    .head_title{
+      position: fixed;
+      width: 100%;
+      z-index: 1;
+      background-color: #fff;
+      p.title {
+        font-size: 30px;
+        margin: 32px 34px;
+        position: relative;
+        text-align: center;
+      }
+    }
+    .voucher-list {
+      margin: 8px 34px;
+      padding-top: 100px;
+      overflow: scroll;
+      .null_wrap{
+        text-align: center;
+      }
+      .voucher-item {
+        width: 600px;
+        height: 170px;
+        display: flex;
+        justify-content: space-between;
+        padding: 25px 34px;
+        margin: 0 auto;
+        margin-bottom: 20px;
+        &:last-child{
+          margin-bottom: 0;
+        }
+        .item-left {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .left_wrap{
+            text-align: left;
+            .coupon_name{
+              font-size: 28px;
+              margin-bottom: 10px;
+            }
+            .condition{
+              font-size: 18px;
+              li{
+                list-style: disc;
+                margin: 5px;
+              }
+            }
+            .overtime{
+              font-size: 18px;
+            }
+          }
+          .right_wrap{
+            font-size: 30px;
+            .numFs{
+              font-size: 56px;
+            }
+          }
+        }
+        .item-right{
+          font-size: 24px;
+          line-height: 110px;
+        }
+      }
+    }
+  }
+}
+.del_btn{
+  position: absolute;
+  top: -15px;
+  right: -15px;
+}
+.vux-toast{
+  .weui-toast_text {
+    .weui-toast__content{
+      font-size: 24px;
+    }
+  }
+}
+.audit{
+  .weui-dialog{
+    border-radius: 12px;
+    max-width: 340px;
+    .weui-dialog__bd{
+      font-size: 24px;
+    }
+    .weui-dialog__ft{
+      font-size: 26px;
+      .weui-dialog__btn_primary{
+        color: @switch-checked-bg-color;
+      }
+    }
+  }
+}
+  .payment{
+    .weui-switch{
+      width: 70px;
+      height: 38px;
+      border-radius: 18px;
+      background-color: @switch-not-checked-bg-color;
+      &:checked{
+        background-color: @switch-checked-bg-color;
+        border-color: @switch-checked-bg-color;
+        &:before{
+          width: 100%;
+          height: 100%;
+          border-radius: 29px;
+        }
+        &:after{
+          top: 0;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          border-color: @switch-checked-btn-color;
+          background-color: @switch-checked-btn-color;
+          transform: translateX(30px);
+          box-shadow: 0 0 15px 0
+          rgba(0, 1, 1, 0.05);
+        }
+      }
+      &:before{
+        width: 100%;
+        height: 100%;
+        border-radius: 29px;
+        background-color: @switch-not-checked-bg-color;
+      }
+      &:after{
+        top: 0;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: @switch-checked-btn-color;
+        box-shadow: 0 0 15px 0
+        rgba(0, 1, 1, 0.05);
+      }
+    }
+  }

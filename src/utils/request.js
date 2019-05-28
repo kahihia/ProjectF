@@ -135,6 +135,10 @@ export default {
     params.sign=signFn(params);
     return Vue.httpClient.post('Api/getMerchantsGoodsField', qs.stringify(params))
   },
+  getMerchantsGoodsFieldBuyUser:(params)=>{//获取商品拼团场次
+    params.sign=signFn(params);
+    return Vue.httpClient.post('Api/getMerchantsGoodsFieldBuyUser', qs.stringify(params))
+  },
   getGoodsOrderList:(params)=>{//获取商品订单列表
     params.sign=signFn(params);
     return Vue.httpClient.post('Api/getGoodsOrderList', qs.stringify(params))

@@ -184,7 +184,17 @@
             if(this.choose_coupon.merchants_coupons_type==1){
               sub_price=sub_price-this.choose_coupon.merchants_coupons_discount;
             }else if(this.choose_coupon.merchants_coupons_type==2){
-              sub_price=sub_price*this.choose_coupon.merchants_coupons_discount/10
+              let disMoney = sub_price*this.choose_coupon.merchants_coupons_discount/10;
+              let upperMoney = sub_price-this.choose_coupon.merchants_coupons_upper_limit_money;
+              if(this.choose_coupon.merchants_coupons_upper_limit_money){
+                if(disMoney<upperMoney){
+                  sub_price=upperMoney;
+                }else {
+                  sub_price=disMoney;
+                }
+              }else {
+                sub_price=disMoney;
+              }
             }
           }
           return sub_price>=0?Math.floor(sub_price*100)/100:0;
@@ -293,7 +303,7 @@
             user_id:String(that.user_info.id),
             merchants_id:String(that.order_info.merchants_goods_merchants_id),
             goods_type:String(that.order_info.merchants_goods_type),
-            money:that.order_info.merchants_goods_discount_price,
+            money:that.order_info.merchatns_goods_platform_discount_price,
             goods_id:that.order_info.goods_order_goods_id,
             goods_category_id:that.order_info.merchants_goods_category,
             timeStamp:that.timeStamp

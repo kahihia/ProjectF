@@ -5,7 +5,7 @@
         <div class="payment-info card">
           <div class="up-wrap" @click="toGoods(billInfo.goods_order_goods_id)">
             <div class="head-img">
-              <img class="mixin-img" :src="imgUrl(billInfo.merchants_goods_img)">
+              <img class="mixin-img" :src="imgUrl(billInfo.merchants_goods_img.split(',')[0])">
             </div>
             <p class="t-b-d good-name">{{billInfo.merchants_goods_name}}</p>
             <p class="c-b good-field" v-show="billInfo.goods_order_goods_field">场次：{{billInfo.goods_order_goods_field}}</p>

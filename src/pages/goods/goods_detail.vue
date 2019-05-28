@@ -99,9 +99,6 @@
             <!--<span class="mixin-right c-b">查看详情</span>-->
           </div>
           <div class="people">
-            <!--<div class="item" v-for="(item,index) in good_info.AlreadyUser" @click="toUserInfo(item.goods_order_user_id)">-->
-              <!--<img class="mixin-img" :src="imgUrl(item.head_img)">-->
-            <!--</div>-->
             <scroller @touchmove.prevent lock-y scrollbar-x :bounce=false height="64px">
               <div class="partHeadImg" ref="partHeadImg">
                 <div class="item" v-for="(item,index) in good_info.AlreadyUser" @click="toUserInfo(item.goods_order_user_id)">
@@ -111,6 +108,7 @@
             </scroller>
           </div>
         </div>
+        <div></div>
         <!--评论区-->
         <div class="comment_wrap" v-show="comment_list.length>0">
           <div class="head_title">
@@ -273,7 +271,6 @@
         noticeMsg:'提示信息',
         AMap:'',
         goods_id: this.$route.query.good_id,//商品id
-        nav: 'iosamap://path?sourceApplication=applicationName&sid=BGVIS1&slat=39.92848272&slon=116.39560823&sname=A&did=BGVIS2&dlat=39.98848272&dlon=116.47560823&dname=B&dev=0&t=0',//商品id
         user_info: getLocalData('user_info'),//用户信息
         user_id: getLocalData('user_info').id,//用户id
         coupon_id:null,//优惠券id
@@ -446,7 +443,19 @@
         })
       },
       changeField(time){
-        this.spell_field=this.spellDate+' '+time
+        let spell_field=this.spellDate+' '+time;
+        this.spell_field = spell_field;
+        this.getUserBuyField(spell_field)
+      },
+      getUserBuyField(date){
+        let params = {
+          id:this.goods_id,
+          choose_date:date,
+          timeStamp:this.timeStamp
+        };
+        request.getMerchantsGoodsFieldBuyUser(params).then(res=>{
+
+        })
       },
       callback(){
         this.show_guide=false;

@@ -226,10 +226,11 @@
         bannerGoodsDetail(item){
           if(item.is_link==1){
             if(item.inside_or_outside==1){
-              this.$router.push({
-                path:'/goodsdetail',
-                query:{good_id:item.url}
-              })
+              // this.$router.push({
+              //   path:'/goodsdetail',
+              //   query:{good_id:item.url}
+              // })
+              window.location.href=item.url
             }else if(item.inside_or_outside==2){
               window.location.href=item.url
             }

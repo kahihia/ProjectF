@@ -2,7 +2,8 @@
 import format from 'dateformat'
 var now = new Date();
 export function formatDateTime (timestamp) {
-  return timestamp && format(timestamp, 'yyyy-mm-dd HH:MM:ss')
+  let newTime = Math.round(timestamp.getTime()-28800);
+  return newTime && format(newTime, 'yyyy-mm-dd HH:MM:ss')
 }
 export function formatDate (timestamp) {
   return timestamp && format(timestamp, 'yyyy-mm-dd')

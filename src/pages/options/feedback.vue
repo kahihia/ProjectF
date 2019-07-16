@@ -53,7 +53,7 @@
           let params={
             user_id:this.user_info.id,
             feedback_content:this.feedback_val,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.userFeedback(params).then(res=>{
             this.show_notice=true;

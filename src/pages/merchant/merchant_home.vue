@@ -39,7 +39,7 @@
                   <div class="phone_num c-b">{{item.phone}}</div>
                   <div class="order_num c-b">订单号 : {{item.goods_order_no}}</div>
                 </div>
-                <div class="">
+                <div>
                   <!--<button class="write_off c-h" v-show="item.goods_order_status==1">核销</button>-->
                   <!--<button class="write_over green_btn" v-show="item.goods_order_status==3|item.goods_order_status==5">-->
                     <!--<em>&radic;</em>-->
@@ -54,22 +54,29 @@
               </div>
             </div>
             <div class="good_block">
-              <div class="good_img">
-                <div class="img_box"><img class="mixin-img" :src="imgUrl(item.goods_imgArr[0])"></div>
+              <div class="name t-b c-Bd">
+                <div class="identification">
+                  <img v-show="item.is_official==1" class="ident-img" src="@/assets/images/common/findif.png">
+                  <img v-show="item.merchants_goods_type==2&&item.is_official==0" class="ident-img" src="@/assets/images/common/spell.png">
+                  <p class="ellipsis good-name">{{item.merchants_goods_name}}</p>
+                </div>
               </div>
-              <div class="good_info">
-                <em class="mark mixin-centerTop" v-show="item.merchants_goods_type==2">团</em>
-                <div class="good_name c-e">{{item.merchants_goods_name}}</div>
-                <div class="shop_name c-e">{{item.merchants_name}}</div>
-                <div class="time_slot c-e">{{item.merchants_goods_available_time}}</div>
-                <div class="price_block">
-                  <div>
+              <div class="info_wrap">
+                <div class="good_img">
+                  <div class="img_box"><img class="mixin-img" :src="imgUrl(item.goods_imgArr[0])"></div>
+                </div>
+                <div class="good_info">
+                  <div class="shop_name c-e">{{item.merchants_name}}</div>
+                  <div class="time_slot c-e">{{item.merchants_goods_available_time}}</div>
+                  <div class="price_block">
+                    <div>
                     <span class="t-b">
                       ￥<em class="c-Ba">{{item.merchants_goods_discount_price}}</em>
                     </span>
-                    <em class="p-original c-Bc">原价 <span class="delete_line">￥{{item.merchants_goods_price}}</span></em>
+                      <em class="p-original c-Bc">原价 <span class="delete_line">￥{{item.merchants_goods_price}}</span></em>
+                    </div>
+                    <div class="c-b">已售 {{item.merchants_goods_sold}}</div>
                   </div>
-                  <div class="c-b">已售 {{item.merchants_goods_sold}}</div>
                 </div>
               </div>
             </div>
@@ -259,38 +266,57 @@
             }
           }
           .good_block{
-            display: flex;
-            .good_img{
-             margin-top: 6px;
-              padding-right: 18px;
-              .img_box{
-                width: 97px;
-                height: 96px;
-              }
-            }
-            .good_info{
-              position: relative;
-              flex: 1;
-              .mark{
-                right: -20px;
-              }
-              .price_block {
+            .name{
+              margin-bottom: 20px;
+              .identification{
                 display: flex;
-                justify-content: space-between;
-                span {
-                  position: relative;
-                  em {
-                    background: linear-gradient(to bottom, #fff 0%, #fff 28%, @Y2 30%, @Y2 100%);
-                    padding-left: 2px;
-                    padding-right: 6px;
-                  }
-                  .p-original {
-                    padding-left: 12px;
-                  }
+                align-items: center;
+                .ident-img{
+                  min-width: 70px;
+                  min-height: 30px;
+                  width:  70px;
+                  height: 30px;
+                }
+                .good-name{
+                  max-width: 85%;
+                  margin-left: 10px;
                 }
               }
-              .time_slot{
-                width: 420px;
+            }
+            .info_wrap{
+              display: flex;
+              .good_img{
+                margin-top: 6px;
+                padding-right: 18px;
+                .img_box{
+                  width: 97px;
+                  height: 96px;
+                }
+              }
+              .good_info{
+                position: relative;
+                flex: 1;
+                .mark{
+                  right: -20px;
+                }
+                .price_block {
+                  display: flex;
+                  justify-content: space-between;
+                  span {
+                    position: relative;
+                    em {
+                      background: linear-gradient(to bottom, #fff 0%, #fff 28%, @Y2 30%, @Y2 100%);
+                      padding-left: 2px;
+                      padding-right: 6px;
+                    }
+                    .p-original {
+                      padding-left: 12px;
+                    }
+                  }
+                }
+                .time_slot{
+                  width: 420px;
+                }
               }
             }
           }

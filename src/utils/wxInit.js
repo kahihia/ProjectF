@@ -24,47 +24,41 @@ function orderQuery(id,payCb) {
     }
   })
 }
-export function wx_grant(callback) {
-  //获取code||source||is_img
-  let code = GetQueryString("code");
-  let source = GetQueryString("source");
-  let is_img = GetQueryString("is_img");
-  let userInfo = getLocalData('user_info');//获取本地用户信息
-  let newSource = '';
-  if(source){
-    newSource = source;
-    setLocalData('source',newSource)
-  }else {
-    newSource=''
-  }
-  if(!userInfo){
+export function wx_grant() {
+  return new Promise((resolve, reject) => {
+    //获取code||source||is_img
+    let code = GetQueryString("code");
+    let source = GetQueryString("source");
+    let is_img = GetQueryString("is_img");
+    // let userInfo = getLocalData('user_info');//获取本地用户信息
+    let newSource = '';
+    if(source){
+      newSource = source;
+      setLocalData('source',newSource)
+    }else {
+      newSource=''
+    }
+    // let type = GetQueryString('type');
     if(code){
       let params = {code: code,source: newSource,is_img: is_img};
+      !newSource?delete params.source:'';
+      !is_img?delete params.is_img:'';
       request.getOpenId(params).then((data)=>{
         if (data.data.code == 200) {
           setLocalData('user_info',data.data.data);
-          userInfo = getLocalData('user_info');//获取本地用户信息
-          // callback();
-          location.href = linkUrl + 'webapp/index.html';
-          if (userInfo.subscribe == 0) {}//未关注公众号
+          // userInfo = getLocalData('user_info');//获取本地用户信息
+          resolve(data.data.data)
+          // location.href = linkUrl + 'webapp/index.html';
         }
       });
     } else {
-      let type = GetQueryString('type');
-      let http_url = {
-        type:type,
-        httpUrl:httpUrl
-      };
-      setLocalData('http_url',http_url);
       let redirectUri = encodeURIComponent(location.href + "?source=");
       location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='
         + appId
         + '&redirect_uri='
         + redirectUri + newSource + '&response_type=code&scope=snsapi_userinfo&state=0220#wechat_redirect';
     }
-  }else {
-    callback()
-  }
+  })
 }
 export function wx_config() {
   let params = {url:localUrl};

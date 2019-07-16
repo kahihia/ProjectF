@@ -307,7 +307,7 @@
         if(this.goods_id){
           let params={
             goods_id:this.goods_id,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.getGoodsInfo(params).then(res=>{
             this.goods_info=res.data.data;
@@ -361,7 +361,7 @@
       },
       typeReq(pid){
         let that = this;
-        let params = {request_type:String(2),pid:String(pid),timeStamp:that.timeStamp};
+        let params = {request_type:String(2),pid:String(pid),timeStamp:formatDateTime(new Date())};
         request.getCategory(params).then((res)=>{
           let arr=res.data.data;
           this.showGoodsData();
@@ -387,7 +387,7 @@
           merchants_goods_type:this.select_show?String(2):String(1),//商品类型
           merchants_goods_start_time:this.valid_data.start_date,
           merchants_goods_end_time:this.valid_data.end_date,
-          timeStamp:this.timeStamp,
+          timeStamp:formatDateTime(new Date()),
         });
         if(!this.select_show){//普通模式
           let valid_time=this.add_goods_data.available_time+' '+
@@ -496,7 +496,7 @@
       getDefaultTime(){
         let params={
           merchants_id:String(this.user_info.merchants_id),
-          timeStamp:this.timeStamp
+          timeStamp:formatDateTime(new Date())
         };
         request.getMerchantsGoodsDefaultTime(params).then(res=>{
           let resData = res.data.data;

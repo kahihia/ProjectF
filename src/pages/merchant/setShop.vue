@@ -360,7 +360,7 @@
             merchants_user_id_card_img:this.IDCardGroup.join(','),//身份证照片
             merchants_health_license_img:this.healthGroup.join(','),//卫生许可证
             merchants_business_license_img:this.businessGroup.join(','),//营业执照照片
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           });
           this.$store.commit('updateLoadingStatus', {isLoading: true});
           if(this.merchants_id){
@@ -391,7 +391,7 @@
         },
         typeReq(pid){
           let that = this;
-          let params = {request_type:String(2),pid:String(pid),timeStamp:that.timeStamp};
+          let params = {request_type:String(2),pid:String(pid),timeStamp:formatDateTime(new Date())};
           request.getCategory(params).then((res)=>{
             let arr=res.data.data;
             arr.map((item,i)=>{
@@ -410,7 +410,7 @@
         getMerchantsInfo(merchants_id){
           let params={
             id:merchants_id,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.merchantsInfo(params).then(res=>{
             this.merchant_info=res.data.data;
@@ -466,12 +466,27 @@
         }
       },
       activated(){
-        this.getQuery();
-        this.typeReq(0);
+        let user_id = this.$route.query.uid;
+        if(user_id){
+          this.getUserInfo(user_id).then(res=>{
+            this.getQuery();
+            this.typeReq(0);
+            this.user_info=res
+          });
+        }else {
+          this.getQuery();
+          this.typeReq(0);
+        }
         this.$store.commit('updateBottomNav', {showBottomNav: false});
       },
       created(){
         // this.getQuery();
+        let user_id = this.$route.query.uid;
+        if(user_id){
+          this.getUserInfo(user_id).then(res=>{
+            this.user_info=res
+          });
+        }
         this.$store.commit('updateBottomNav', {showBottomNav: false});
       },
       destroyed(){

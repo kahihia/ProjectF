@@ -86,7 +86,7 @@
           let that = this;
           let params={
             user_id:this.user_info.id,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.getUserCollectionGoodsLists(params).then(res=>{
             this.collect_list=res.data.data;

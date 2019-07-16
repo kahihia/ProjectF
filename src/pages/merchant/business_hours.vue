@@ -83,7 +83,7 @@
             id:this.user_info.merchants_id,
             merchants_user_id:this.user_info.id,
             merchants_open_time:open_time,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.editMerchants(params).then(res=>{
             if(res.data.code==200){

@@ -44,7 +44,7 @@
         getMerchantsBill(){
           let params={
             merchants_id:this.user_info.merchants_id,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.getMerchantsBill(params).then(res=>{
             this.merchants_bill=res.data.data
@@ -54,7 +54,7 @@
         getUserBill(){
           let params={
             user_id:this.user_info.id,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.getUserBill(params).then(res=>{
             this.merchants_bill=res.data.data

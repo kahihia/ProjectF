@@ -67,7 +67,6 @@
               shop_left_icon:require('@/assets/images/head_icon/icon_exit.png')
             },
             user_info: getLocalData('user_info'),//用户信息
-            timeStamp:formatDateTime(new Date()),//时间戳
           }
         },
         created(){
@@ -99,7 +98,7 @@
           },
           // 用户收藏商品
           userCollectGoods(){
-            let params = {user_id:this.user_info.id,goods_id:this.goods_id,timeStamp:this.timeStamp};
+            let params = {user_id:this.user_info.id,goods_id:this.goods_id,timeStamp:formatDateTime(new Date())};
             request.userCollectionGoods(params).then(res=>{
               var revert = res.data;
               if(revert.code===200){
@@ -108,7 +107,7 @@
             })
           },
           CancelCollectGoods(){
-            let params={user_id:this.user_info.id,goods_id:this.goods_id,timeStamp:this.timeStamp};
+            let params={user_id:this.user_info.id,goods_id:this.goods_id,timeStamp:formatDateTime(new Date())};
             request.userCancelCollectionGoods(params).then(res=>{
               this.$emit('is_collect',false)
             })

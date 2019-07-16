@@ -7,22 +7,37 @@
           <div class="top_line">
             <div class="img_box"><img v-if="order_info.merchants_imgArr" :src="imgUrl(order_info.merchants_imgArr[0])" class="mixin-img"/></div>
             <span class="good_name c-b">{{order_info.merchants_name}}</span>
-            <div class="mixin-right">
-              <em class="c-q" v-if="order_info.goods_order_status==0">待付款</em>
+            <div class="mixin-right status">
+              <em class="e_k" v-if="order_info.goods_order_status==0">待付款</em>
               <em class="c-q" v-else-if="order_info.goods_order_status==1">待使用</em>
               <em class="c-b" v-else-if="order_info.goods_order_status==2">已取消</em>
-              <em class="c-q" v-else-if="order_info.goods_order_status==3">待评价</em>
+              <em class="c-a" v-else-if="order_info.goods_order_status==3">待评价</em>
               <em class="c-b" v-else-if="order_info.goods_order_status==4">已失效</em>
               <em class="c-b" v-else-if="order_info.goods_order_status==5">已评价</em>
             </div>
           </div>
           <div class="info_line">
+            <div class="name t-b c-Bd">
+              <div class="identification">
+                <img v-show="order_info.is_official==1" class="ident-img" src="@/assets/images/common/findif.png">
+                <img v-show="order_info.merchants_goods_type==2&&order_info.is_official==0" class="ident-img" src="@/assets/images/common/spell.png">
+                <p class="ellipsis good-name">{{order_info.merchants_goods_name}}</p>
+              </div>
+            </div>
             <div class="up_info">
               <div class="good_img"><img v-if="order_info.goods_imgArr" :src="imgUrl(order_info.goods_imgArr[0])" class="mixin-img"/></div>
               <div class="text_info">
-                <div class="item_info c-a"><span>{{order_info.merchants_goods_name}}</span><span>￥{{order_info.merchatns_goods_platform_discount_price }}</span></div>
-                <div class="item_info c-a" v-if="order_info.goods_order_goods_field"><span>日期:{{order_info.goods_order_goods_field.split(' ')[0]}}</span><span class="original c-b">￥{{order_info.merchatns_goods_platform_price}}</span></div>
+                <!--<div class="item_info c-a"><span>{{order_info.merchants_goods_name}}</span><span>￥{{order_info.merchatns_goods_platform_discount_price }}</span></div>-->
+                <div class="item_info c-a" v-if="order_info.goods_order_goods_field">
+                  日期:{{order_info.goods_order_goods_field.split(' ')[0]}}
+                  <!--<span>日期:{{order_info.goods_order_goods_field.split(' ')[0]}}</span>-->
+                  <!--<span class="original c-b">￥{{order_info.merchatns_goods_platform_price}}</span>-->
+                </div>
                 <div class="item_info c-a" v-if="order_info.goods_order_goods_field"><span>时间:{{order_info.goods_order_goods_field.split(' ')[1]}}</span></div>
+                <div class="item_info c-a" v-if="order_info.goods_order_goods_field">
+                  <span class="c-Bd">￥{{order_info.merchatns_goods_platform_discount_price}}</span>
+                  <span class="original c-b">￥{{order_info.merchatns_goods_platform_price}}</span>
+                </div>
               </div>
             </div>
             <div class="down_info" v-show="Number(order_info.goods_order_user_coupons_money)!=0">
@@ -92,7 +107,7 @@
         <p v-if="$route.query.role!=='merchant'">如需取消，请在开场前{{order_info.merchants_goods_cancel_order_time}}小时取消订单</p>
       </div>
     </div>
-    <div class="QRcode_dialog" v-transfer-dom>
+    <div class="QRcode_dialog">
       <x-dialog v-model="QRcode_show" class="dialog-demo">
         <div class="order_qr">
           <div class="clearfix">
@@ -334,27 +349,53 @@
               overflow: hidden;
               margin-right: 8px;
             }
+            .status{
+              em{
+                display: block;
+                padding: 8px 15px;
+                .mixin-borderRadius(20px);
+                border: 1px solid;
+              }
+            }
           }
           .info_line{
             padding: 17px 0 20px 0;
             border-top:1px solid @border_c;
+            .name{
+              margin-bottom: 20px;
+              .identification{
+                display: flex;
+                align-items: center;
+                .ident-img{
+                  min-width: 70px;
+                  min-height: 30px;
+                  width:  70px;
+                  height: 30px;
+                }
+                .good-name{
+                  max-width: 85%;
+                  margin-left: 10px;
+                }
+              }
+            }
             .up_info{
               display: flex;
-              align-items: center;
-              justify-content: space-between;
+              /*align-items: center;*/
+              /*justify-content: space-between;*/
               .good_img{
                 width: 170px;
                 height: 170px;
               }
               .text_info{
-                width: 455px;
-                height: 90px;
+                /*width: 455px;*/
+                /*height: 90px;*/
+                margin-left: 15px;
                 display: flex;
                 flex-direction: column;
-                justify-content: space-between;
+                /*justify-content: space-between;*/
                 .item_info{
                   display: flex;
-                  justify-content: space-between;
+                  /*justify-content: space-between;*/
                   align-items: center;
                   margin-top: 20px;
                   &:nth-of-type(1){
@@ -362,6 +403,7 @@
                   }
                   .original{
                     text-decoration: line-through;
+                    margin-left: 30px;
                   }
                 }
               }
@@ -458,7 +500,7 @@
   }
 </style>
 <style lang="less">
-  .QRcode_dialog{
+  #order_detail{
     .weui-dialog{
       max-width: 500px;
       height: 444px;

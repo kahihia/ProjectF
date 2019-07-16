@@ -143,14 +143,14 @@
           this.$router.push({path:'/upAlbum',query:{roles:'user'}})
         },
         getUserAlbum(){
-          let params = {user_id:this.user_info.id,timeStamp:this.timeStamp};
+          let params = {user_id:this.user_info.id,timeStamp:formatDateTime(new Date())};
           request.getUserPhotoAlbum(params).then(res=>{
             this.album_data = res.data.data;
             this.changeWidth()
           })
         },
         getAge(){
-          let params={timeStamp:this.timeStamp};
+          let params={timeStamp:formatDateTime(new Date())};
           request.getAge(params).then(res=>{
             let age_list=res.data.data;
             age_list.map((val,key)=>{
@@ -173,7 +173,7 @@
             user_id:this.user_info.id,
             update_class:cate,
             update_content:content,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           if(cate==='id_card'&&!this.regularStr(content,cate)){
             this.show_notice=true;

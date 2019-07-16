@@ -48,7 +48,7 @@
         getBankLists(){
           let params={
             user_id:this.user_info.id,
-            timeStamp:this.timeStamp,
+            timeStamp:formatDateTime(new Date()),
           };
           request.getBingBankLists(params).then(res=>{
             if(res.data.code===200){

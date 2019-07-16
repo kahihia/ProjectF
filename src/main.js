@@ -9,8 +9,10 @@ import './assets/js/setWarp'//不同dpr手机兼容
 import './assets/less/common.less'//公用样式
 import common from './assets/js/common'
 import 'font-awesome/css/font-awesome.css'
+import preview from 'vue-photo-preview'
+import 'vue-photo-preview/dist/skin.css'
 Vue.config.productionTip = false;
-
+Vue.use(preview);
 Vue.use(api);
 Vue.use(common);
 

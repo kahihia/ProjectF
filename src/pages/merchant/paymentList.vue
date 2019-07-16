@@ -56,7 +56,7 @@
         getMerchantsBillLi(){
           let params={
             merchants_id:this.user_info.merchants_id,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.getMerchantsBillLists(params).then(res=>{
             this.budget_list=res.data.data;
@@ -66,7 +66,7 @@
         getUserBillLi(){
           let params={
             user_id:this.user_info.id,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.getUserBillLists(params).then(res=>{
             this.budget_list=res.data.data;

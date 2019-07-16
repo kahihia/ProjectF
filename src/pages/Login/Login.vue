@@ -117,7 +117,6 @@
                     phone: that.phoneNum,
                     login_type: 2,
                     timeStamp: formatDateTime(new Date()),
-
                     register_source:'wechat',
                     source:source
                   };
@@ -128,28 +127,27 @@
                   request.login(log_params).then((res) => {
                     setLocalData('user_info', res.data.data);
                     if (res.data.code == 200) {
-                      that.$router.push({
-                        path: '/'
-                      })
+                      if(getLocalData('come_url').indexOf('good_id=') !== -1){
+                        window.location.href = getLocalData('come_url')
+                      }else {
+                        that.$router.push({
+                          path: '/'
+                        })
+                      }
                     }else {
                       this.alert_show=true;
                       this.alert_text=res.data.message;
                     }
                   })
                 }
+              }else {
+                this.alert_show=true;
+                this.alert_text=data.data.message;
               }
             });
           }
         // }
       },
-      touristLogin() {
-        var that = this;
-        that.$router.push({
-          path: "/index"
-        })
-      },
-      checkArg() {
-      }
     },
     mounted() {
       this.$store.commit('updateBottomNav', {showBottomNav: false})

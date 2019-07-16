@@ -3,50 +3,44 @@
       <head_bar :backLast="back_last" :tab_c="tab_c" :head="head" :bg_color="bg_color"></head_bar>
       <div class="allOrder">
         <div class="order_bar">
-          <tab custom-bar-width="60px" :line-width="8" bar-active-color="#ffe035" active-color="#363636" default-color="#959595">
-            <tab-item selected @click.native="getOrderList()">全部</tab-item>
-            <tab-item @click.native="getOrderList(0)">待付款</tab-item>
-            <tab-item @click.native="getOrderList(1)">待使用</tab-item>
-            <tab-item @click.native="getOrderList(3)">待评价</tab-item>
+          <tab v-model="barIndex" custom-bar-width="60px" prevent-default @on-before-index-change="switchTabItem"
+               :line-width="8" bar-active-color="#ffe035" active-color="#363636" default-color="#959595">
+            <tab-item>全部</tab-item>
+            <tab-item>待付款</tab-item>
+            <tab-item>待使用</tab-item>
+            <tab-item>待评价</tab-item>
           </tab>
         </div>
         <ul class="order_block">
           <li class="order_item card" v-for="(item,index) in order_list">
             <div class="up_wrap">
               <span class="c-j">订单编号：{{item.goods_order_no}}</span>
-              <em class="c-q" v-if="item.goods_order_status==0">待付款</em>
-              <em class="c-q" v-else-if="item.goods_order_status==1">待使用</em>
-              <em class="c-b" v-else-if="item.goods_order_status==2">已取消</em>
-              <em class="c-q" v-else-if="item.goods_order_status==3">待评价</em>
-              <em class="c-b" v-else-if="item.goods_order_status==4">已失效</em>
-              <em class="c-b" v-else-if="item.goods_order_status==5">已评价</em>
+              <div class="status">
+                <em class="e_k" v-if="item.goods_order_status==0" >待付款</em>
+                <em class="c-q" v-else-if="item.goods_order_status==1">待使用</em>
+                <em class="c-b" v-else-if="item.goods_order_status==2">已取消</em>
+                <em class="c-a" v-else-if="item.goods_order_status==3">待评价</em>
+                <em class="c-b" v-else-if="item.goods_order_status==4">已失效</em>
+                <em class="c-b" v-else-if="item.goods_order_status==5">已评价</em>
+              </div>
             </div>
             <div class="mid_wrap" @click="toDetail(item.id)">
-              <div class="goods_img">
-                <img class="mixin-img" :src="imgUrl(item.goods_imgArr[0])"/>
+              <div class="name t-b c-Bd">
+                <div class="identification">
+                  <img v-show="item.is_official==1" class="ident-img" src="@/assets/images/common/findif.png">
+                  <img v-show="item.merchants_goods_type==2&&item.is_official==0" class="ident-img" src="@/assets/images/common/spell.png">
+                  <p class="ellipsis good-name">{{item.merchants_goods_name}}</p>
+                </div>
               </div>
-              <div class="goods_info">
-                <div class="up_line">
-                  <span class="goods_name c-Bd">{{item.merchants_goods_name}}</span>
-                  <span class="goods_num c-j">X{{item.goods_order_buy_number}}</span>
+              <div class="mid_info">
+                <div class="goods_img">
+                  <img class="mixin-img" :src="imgUrl(item.goods_imgArr[0])"/>
                 </div>
-                <div class="comment_line">
-                  <img v-for="i in item.merchants_goods_comments_star_level"
-                       src="../../assets/images/icon/icon_star.png"/>
-                  <span class="com_text c-j">{{item.merchants_goods_comments_number}}评价</span>
-                </div>
-                <div class="time_slot c-Bc">{{item.merchants_goods_available_time}}</div>
-                <div class="price_line">
-                  <span class="t-b-b">￥<em>{{item.goods_order_money}}</em></span>
-                  <em class="p-original c-Bc">原价<span class="delete_line">￥{{item.merchatns_goods_platform_price}}</span></em>
-                </div>
-                <div class="down_line">
-                  <div class="coupon" v-show="item.goods_order_status==0">
-                    <img src="../../assets/images/detail/icon_coupon.png"/>
-                    <span class="c-Bc">优惠券</span>
-                  </div>
-                  <div>
-                    <span class="c-j">合计</span><span class="c-Bd">￥{{item.goods_order_money}}</span>
+                <div class="goods_info">
+                  <div class="item_info c-a" v-if="item.goods_order_goods_field"><span>日期:{{item.goods_order_goods_field.split(' ')[0]}}</span></div>
+                  <div class="item_info c-a" v-if="item.goods_order_goods_field"><span>时间:{{item.goods_order_goods_field.split(' ')[1]}}</span></div>
+                  <div class="item_info down_line">
+                    <div class="e_j"><span>合计</span><span>￥{{item.goods_order_money}}</span></div>
                   </div>
                 </div>
               </div>
@@ -76,35 +70,33 @@
           </li>
         </ul>
       </div>
-      <div class="QRcode_dialog" v-transfer-dom>
-        <x-dialog v-model="QRcode_show" class="dialog-demo">
-          <div class="order_qr">
-            <div class="clearfix">
-              <img src="../../assets/images/icon/icon_close.png"
-                   class="close_btn" @click="hideQR"/>
-            </div>
-            <p class="t_e">{{codeTitle}}</p>
-            <qrcode class="qrcode" v-if="is_meituan==0" :value="JSON.stringify(barcode)"></qrcode>
-            <qrcode class="qrcode" v-if="is_meituan==1" :value="barcode"></qrcode>
-            <p class="c-b">请向商家展示此二维码</p>
+      <x-dialog v-model="QRcode_show" class="dialog-demo">
+        <div class="order_qr">
+          <div class="clearfix">
+            <img src="../../assets/images/icon/icon_close.png"
+                 class="close_btn" @click="hideQR"/>
           </div>
-        </x-dialog>
-      </div>
-      <div class="hint" v-transfer-dom>
+          <p class="t_e">{{codeTitle}}</p>
+          <qrcode class="qrcode" v-if="is_meituan==0" :value="JSON.stringify(barcode)"></qrcode>
+          <qrcode class="qrcode" v-if="is_meituan==1" :value="barcode"></qrcode>
+          <p class="c-b">请向商家展示此二维码</p>
+        </div>
+      </x-dialog>
+      <div class="hint">
         <confirm v-model="hint_show"
                  title="操作提示"
                  @on-confirm="onConfirm">
           <p style="text-align:center;">确定取消吗？</p>
         </confirm>
       </div>
-      <div class="hint" v-transfer-dom>
+      <div class="hint">
         <confirm v-model="del_show"
                  title="操作提示"
                  @on-confirm="onConfirmDel">
           <p style="text-align:center;">确定删除吗？</p>
         </confirm>
       </div>
-      <div class="notice" v-transfer-dom>
+      <div class="notice">
         <popup v-model="show_notice" position="top" :show-mask="false">
           <div class="position-vertical-demo">{{noticeMsg}}</div>
         </popup>
@@ -116,14 +108,12 @@
   import head_bar from '@/components/head_bar'
   import {formatDateTime, formatDate2} from '@/utils/format';
   import request from '@/utils/request';
-  import {Tab,TabItem,Qrcode,XDialog,Confirm,Popup,TransferDomDirective as TransferDom} from 'vux';
+  import {Tab,TabItem,Qrcode,XDialog,Confirm,Popup} from 'vux';
   import {getLocalData} from '@/utils/storages';
   import {wxPayment} from '@/utils/wxInit';
-  let timeInterval;
   export default {
       name: "order_list",
       components:{head_bar,Tab,TabItem,Qrcode,XDialog,Confirm,Popup},
-      directives: {TransferDom},
       data(){
         return{
           tab_c:true,
@@ -131,9 +121,8 @@
           head:'订单列表',
           bg_color:'#f4f3f0',
           user_info:getLocalData('user_info'),
-          tab_data:[
-            {tab_name:'全部',}
-          ],
+          barIndex:0,
+
           order_list:[],
           order_data:'',
           order_id:'',
@@ -146,6 +135,7 @@
           show_notice:false,
           noticeMsg:'',
           is_meituan:'',
+          timeInterval:null,
         }
       },
       watch:{
@@ -158,6 +148,13 @@
         },
       },
       methods:{
+        switchTabItem(index){
+          this.barIndex=index;
+          if(index==0){this.getOrderList('')}
+          if(index==1){this.getOrderList('0')}
+          if(index==2){this.getOrderList('1')}
+          if(index==3){this.getOrderList('3')}
+        },
         toDetail(id){
           this.$router.push({path:'/orderDetail',query:{order_id:id}})
         },
@@ -167,13 +164,17 @@
         // 获取用户订单列表
         getOrderList(status){
           let that = this;
-          status==0?status=String(status):false;
-          let params = this.deleteStr({user_id:String(this.user_info.id),goods_order_status:status,timeStamp:that.timeStamp});
+          let params = {
+            user_id:this.user_info.id,
+            goods_order_status:status,
+            timeStamp:formatDateTime(new Date())
+          };
+          params.goods_order_status?'':delete params.goods_order_status;
           request.getGoodsOrderList(params).then(res=>{
             that.$store.commit('updateLoadingStatus', {isLoading: false});
             that.order_list = res.data.data;
             that.order_data = res.data;
-            this.order_list.map((val,key)=>{
+            this.order_list.forEach((val,key)=>{
               val.goods_imgArr = val.merchants_goods_img.split(',');
               if(val.merchants_goods_type==2){
                 let avalid_time = JSON.parse(val.merchants_goods_available_time);
@@ -211,10 +212,10 @@
         },
         hideQR(){
           this.QRcode_show=false;
-          clearInterval(timeInterval)
+          clearInterval(this.timeInterval)
         },
         watchBarcode(good_img){
-          timeInterval=setInterval(()=>{
+          this.timeInterval=setInterval(()=>{
             let params = {
               user_id:this.barcode.user_id,
               goods_id:this.barcode.goods_id,
@@ -223,7 +224,7 @@
             };
             request.monitorMerchantsGoodsBarcode(params).then(res=>{
               if(res.data.code==200){
-                clearInterval(timeInterval);
+                clearInterval(this.timeInterval);
                 this.$router.push({
                   path:'/writeOffSuc',
                   query:{good_id:this.barcode.goods_id,good_img:good_img}
@@ -263,7 +264,7 @@
             this.show_notice=true;
             this.noticeMsg=res.data.message;
             if(res.data.code==200){
-              this.getOrderList();
+              this.getOrderList('');
             }
           })
         },
@@ -291,14 +292,14 @@
         }
       },
       created(){
-        clearInterval(timeInterval)
+        clearInterval(this.timeInterval)
       },
       mounted(){
-        this.getOrderList();
         this.$store.commit('updateBottomNav', {showBottomNav: false});
+        this.getOrderList();
       },
       destroyed(){
-        clearInterval(timeInterval);
+        clearInterval(this.timeInterval);
         this.$store.commit('updateBottomNav', {showBottomNav: true});
       }
     }
@@ -310,11 +311,21 @@
     background-color: @bg-c;
     box-shadow: 0 0 15px 0
     rgba(0, 1, 1, 0.05);
-    .mixin-borderRadius(8px)
+    .mixin-borderRadius(8px);
   }
   #order_list{
     min-height: 100%;
     background-color: @bg-b;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 180px;
+    overflow-y: scroll;
+    width: 100%;
+    height: auto;
+    -webkit-overflow-scrolling: touch;   /*这句是为了滑动更顺畅*/
+    opacity: 1;
+    z-index: 100;
     .allOrder{
       padding: 110px 32px 90px;
       .order_block{
@@ -330,45 +341,78 @@
             justify-content: space-between;
             padding-bottom: 20px;
             border-bottom: 1px solid @border_c;
+            .status{
+              em{
+                display: block;
+                padding: 8px 15px;
+                .mixin-borderRadius(20px);
+                border: 1px solid;
+              }
+            }
           }
           .mid_wrap{
             padding: 12px 0 20px;
-            display: flex;
             border-bottom: 1px solid @border_c;
-            .goods_img{
-              width: 170px;
-              height: 170px;
-              margin-right: 20px;
-            }
-            .goods_info{
-              flex: 1;
-              .up_line{
+            .name{
+              margin-bottom: 20px;
+              .identification{
                 display: flex;
-                justify-content: space-between;
                 align-items: center;
+                .ident-img{
+                  min-width: 70px;
+                  min-height: 30px;
+                  width:  70px;
+                  height: 30px;
+                }
+                .good-name{
+                  max-width: 85%;
+                  margin-left: 10px;
+                }
               }
-              .price_line {
-                span {
-                  position: relative;
-                  em {background: linear-gradient(to bottom, #fff 0%, #fff 28%, @Y2 30%, @Y2 100%);
-                    padding-left: 2px;
-                    padding-right: 6px;}
-                  .p-original {
-                    padding-left: 12px;
+            }
+            .mid_info{
+              display: flex;
+              .goods_img{
+                width: 170px;
+                height: 170px;
+                margin-right: 20px;
+              }
+              .goods_info{
+                flex: 1;
+                .item_info{
+                  display: flex;
+                  align-items: center;
+                  margin-top: 20px;
+                  &:nth-of-type(1){
+                    margin-top: 0;
+                  }
+                  .original{
+                    text-decoration: line-through;
                   }
                 }
-              }
-              .down_line{
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-top: 4px;
-                .coupon{
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                  width: 124px;
+                .price_line {
+                  span {
+                    position: relative;
+                    em {background: linear-gradient(to bottom, #fff 0%, #fff 28%, @Y2 30%, @Y2 100%);
+                      padding-left: 2px;
+                      padding-right: 6px;}
+                    .p-original {
+                      padding-left: 12px;
+                    }
+                  }
                 }
+                /*.down_line{*/
+                  /*display: flex;*/
+                  /*justify-content: space-between;*/
+                  /*align-items: center;*/
+                  /*margin-top: 4px;*/
+                  /*.coupon{*/
+                    /*display: flex;*/
+                    /*justify-content: space-between;*/
+                    /*align-items: center;*/
+                    /*width: 124px;*/
+                  /*}*/
+                /*}*/
               }
             }
           }
@@ -417,8 +461,6 @@
         }
       }
     }
-  }
-  .QRcode_dialog{
     .weui-dialog{
       max-width: 500px;
       height: 444px;

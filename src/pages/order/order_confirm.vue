@@ -270,7 +270,7 @@
           let params = {
             id:this.order_id,//order_id
             user_id:this.user_info.id,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.getGoodsOrderInfo(params).then(res=>{
             let order_info = res.data.data;
@@ -290,7 +290,7 @@
         getBill(){
           let params = {
             user_id:this.user_info.id,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.getUserBill(params).then(res=>{
             this.user_bill = res.data.data
@@ -306,7 +306,7 @@
             money:that.order_info.merchatns_goods_platform_discount_price,
             goods_id:that.order_info.goods_order_goods_id,
             goods_category_id:that.order_info.merchants_goods_category,
-            timeStamp:that.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           if(that.order_info.merchants_goods_type==2){
             params.goods_field=that.order_info.goods_order_goods_field
@@ -341,7 +341,7 @@
           let that = this;
           that.show_load=false;
           that.$store.commit('updateLoadingStatus', {isLoading: false});
-          that.$router.push({path:'/orderList'})
+          this.$router.push({path:'/orderDetail',query:{order_id:that.order_id}})
         },
         // 确认提交商品订单
         submitGoodsOrder(){
@@ -353,7 +353,7 @@
             id:String(that.order_id),//order_id
             is_user_bill:String(useBill),
             buy_number:String(this.goods_num),
-            timeStamp:that.timeStamp,
+            timeStamp:formatDateTime(new Date()),
             user_coupons_id:that.coupon_id
           };
           !that.coupon_id?delete params.user_coupons_id:'';
@@ -367,7 +367,7 @@
                 wxPayment(that.order_id,that.payCancel,that.payCancel);
               }else if(revert.data.need_pay==0){
                 that.$store.commit('updateLoadingStatus', {isLoading: true});
-                this.$router.push({path:'/orderList'})
+                this.$router.push({path:'/orderDetail',query:{order_id:that.order_id}})
               }
             }else {
               this.alert_show=true;
@@ -380,7 +380,7 @@
         //   let params={
         //     id:84,//order_id
         //     user_id:this.user_info.id,
-        //     timeStamp:this.timeStamp
+        //     timeStamp:formatDateTime(new Date())
         //   };
         //   request.cancelGoodsOrder(params).then(res=>{
         //   })

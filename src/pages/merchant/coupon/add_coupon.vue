@@ -197,7 +197,7 @@
             type:String(this.type_show+1),
             usable_goods_type:String(this.select_show),
             issue_number:this.coupon_data.issue_number,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.editMerchantsCoupons(params).then(res=>{
             this.show_notice=true;
@@ -218,7 +218,7 @@
             starttime:this.valid_data.start_date,
             overtime:this.valid_data.end_date,
             merchants_id:this.user_info.merchants_id,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.addMerchantsCoupons(params).then(res=>{
             if(res.data.code==200){
@@ -229,7 +229,7 @@
         getCouponsInfo(coupon_id){
           let params={
             id:coupon_id,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.getMerchantsCouponsInfo(params).then(res=>{
             this.assignment(res.data.data)

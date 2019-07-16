@@ -16,7 +16,7 @@
   import { Loading } from 'vux'
   import { mapState,mapActions } from 'vuex'
   import {wx_grant,wx_config} from '@/utils/wxInit'
-  import {location,GetQueryString} from '@/utils/utils'
+  import {location,GetQueryString,isWx} from '@/utils/utils'
   import {getLocalData} from '@/utils/storages'
   import AMap from '@/utils/AMap'
   import {setLocalData} from "./utils/storages";
@@ -49,10 +49,11 @@
     },
     created(){
       this.localData();
-      this.is_weixn();
+      // this.is_weixn();
+      this.getUrl()
     },
     mounted(){
-      this.initJIM
+      // this.initJIM
     },
     computed: {
       ...mapState({
@@ -60,7 +61,7 @@
         is_init: state => state.remix.is_init,
         JIM: state => state.chat.JIM,
       }),
-      ...mapActions(['initJIM']),
+      // ...mapActions(['initJIM']),
     },
     methods:{
       localData(){
@@ -76,6 +77,14 @@
         // }
         // end
       },
+      getUrl(){
+        console.log(window.location.href);
+        if(isWx()){
+          wx_config();
+        }
+        let httpUrl = window.location.href;
+        setLocalData("come_url",httpUrl)
+      },
       location(){
         AMap.init().then(AMap => {
           location(AMap)
@@ -83,21 +92,23 @@
       },
       callback(){
         let that = this;
+        httpUrl = getLocalData('http_url');
+        location.href=httpUrl
       },
-      is_weixn(){
-        let that = this;
-        let ua = navigator.userAgent.toLowerCase();
-        if(ua.match(/MicroMessenger/i)=="micromessenger") {
-          wx_grant(that.callback);
-          wx_config();
-        }else {
-          // this.location()
-          let source = GetQueryString("source");
-          if(source){
-            this.$store.commit('updateSource',{source:source});
-          }
-        }
-      }
+      // is_weixn(){
+      //   let that = this;
+      //   let ua = navigator.userAgent.toLowerCase();
+      //   if(ua.match(/MicroMessenger/i)=="micromessenger") {
+      //     wx_grant(that.callback);
+      //     wx_config();
+      //   }else {
+      //     // this.location()
+      //     let source = GetQueryString("source");
+      //     if(source){
+      //       this.$store.commit('updateSource',{source:source});
+      //     }
+      //   }
+      // }
     },
 }
 </script>

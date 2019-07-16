@@ -160,7 +160,7 @@
         let params = {
           is_merchants_get:String(0),
           merchants_goods_merchants_id:String(this.merchantId),
-          timeStamp: this.timeStamp,
+          timeStamp: formatDateTime(new Date()),
         };
         request.getGoodslist(params).then(res => {
           let resData = res.data;
@@ -194,7 +194,7 @@
       //获取优惠券列表
       getMerchantsCoupons(){
         let that = this;
-        let params={user_id:that.user_id,merchants_id:that.merchantId,timeStamp: that.timeStamp};
+        let params={user_id:that.user_id,merchants_id:that.merchantId,timeStamp: formatDateTime(new Date())};
         request.getMerchantsCoupons(params).then(res=>{
           this.coupon_list = res.data.data;
           this.coupon_data = res.data;
@@ -215,7 +215,7 @@
         let params={
           user_id:that.user_id,
           merchants_coupons_id:coupon_id,
-          timeStamp:that.timeStamp
+          timeStamp:formatDateTime(new Date())
         };
         request.userReceiveCoupons(params).then(res=>{
           this.noticeMsg=res.data.message;

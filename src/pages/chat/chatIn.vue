@@ -281,7 +281,7 @@
         let params = {
           goods_id: that.good_id,
           user_id: that.user_info.id,
-          timeStamp: this.timeStamp,
+          timeStamp: formatDateTime(new Date()),
         };
         request.getGoodsInfo(params).then(res => {
           var good_info = res.data.data;

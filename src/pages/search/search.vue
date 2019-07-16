@@ -13,41 +13,43 @@
     </x-search>
     <div class="searchGoods">
       <div class="good-item clearfix" v-for="(item,index) in results" @click="resultClick(item.id,item.distance)">
-        <div class="good-img _left">
-          <img class="mixin-img" :src="imgUrl(item.merchants_goods_img[0])">
+        <div class="name t-b">
+          <div class="identification">
+            <img v-show="item.is_official==1" class="ident-img" src="@/assets/images/common/findif.png">
+            <img v-show="item.merchants_goods_type==2&&item.is_official==0" class="ident-img" src="@/assets/images/common/spell.png">
+            <p class="ellipsis good-name">{{item.merchants_goods_name}}</p>
+          </div>
+          <em class="c-b" v-if="item.distance">{{item.distance}}</em>
         </div>
-        <div class="good-txt _left">
-          <div class="name t-b">
-            <div class="identification">
-              <img v-show="item.is_official==1" class="ident-img" src="@/assets/images/common/findif.png">
-              <img v-show="item.merchants_goods_type==2&&item.is_official==0" class="ident-img" src="@/assets/images/common/spell.png">
-              <p class="ellipsis c-Bd good-name">{{item.merchants_goods_name}}</p>
+        <div class="goods_info">
+          <div class="good-img _left">
+            <img class="mixin-img" :src="imgUrl(item.merchants_goods_img[0])">
+          </div>
+          <div class="good-txt _left">
+            <div class="evaluate ellipsis">
+              <img v-for="i in item.merchants_goods_comments_star_level" src="../../assets/images/icon/icon_star.png"/>
+              <i class="c-b">{{item.merchants_goods_comments_number}}评价</i>
             </div>
-            <em class="c-b" v-if="item.distance">{{item.distance}}</em>
-          </div>
-          <div class="evaluate ellipsis">
-            <img v-for="i in item.merchants_goods_comments_star_level" src="../../assets/images/icon/icon_star.png"/>
-            <i class="c-b">{{item.merchants_goods_comments_number}}评价</i>
-          </div>
-          <div class="shop-name c-a ellipsis">
-            {{item.merchants_name}}
-          </div>
-          <div v-show="item.is_official==0" class="time ellipsis c-a">
-            {{item.merchants_goods_available_time}}
-            <span v-if="item.signEndTime==1">最后一天</span>
-          </div>
-          <div v-show="item.is_official==1" class="time ellipsis c-a">
-            {{item.merchants_goods_field_time}}
-            <span v-if="item.signEndTime==1">最后一天</span>
-          </div>
-          <div class="c-c price">
-            <div class="left-txt">
+            <div class="shop-name c-a ellipsis">
+              {{item.merchants_name}}
+            </div>
+            <div v-show="item.is_official==0" class="time ellipsis c-a">
+              {{item.merchants_goods_available_time}}
+              <span v-if="item.signEndTime==1">最后一天</span>
+            </div>
+            <div v-show="item.is_official==1" class="time ellipsis c-a">
+              {{item.merchants_goods_field_time}}
+              <span v-if="item.signEndTime==1">最后一天</span>
+            </div>
+            <div class="c-c price">
+              <div class="left-txt">
               <span class="t-b-b">
                 ￥<em>{{item.merchatns_goods_platform_discount_price}}</em>
               </span>
-              <em class="p-original c-Bc">原价 <span class="delete_line">￥{{item.merchatns_goods_platform_price}}</span></em>
+                <em class="p-original c-Bc">原价 <span class="delete_line">￥{{item.merchatns_goods_platform_price}}</span></em>
+              </div>
+              <div class="right-sold c-b">已售{{item.merchants_goods_sold}}</div>
             </div>
-            <div class="right-sold c-b">已售{{item.merchants_goods_sold}}</div>
           </div>
         </div>
       </div>
@@ -111,7 +113,7 @@
           let params={
             is_merchants_get:0,
             search_name:val,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           return new Promise((resolve, reject)=>{
             request.getGoodslist(params).then(res=>{
@@ -148,29 +150,16 @@
       padding: 24px;
       .mixin-borderRadius(12px);
       margin-bottom: 8px;
-      .good-img {
-        display: block;
-        width: 170px;
-        height: 170px;
-        margin-right: 20px;
-      }
-      .good-txt {
-        width: calc(100% - 190px);
-        position: relative;
-        .name {
-          width: 80%;
-          padding-bottom: 4px;
-          em {
-            position: absolute;
-            right: 0;
-            top: 0;
-          }
-        }
+      .name {
+        font-size: 28px;
+        padding-bottom: 12px;
         .identification{
           display: flex;
           align-items: center;
           .ident-img{
-            width: 70px;
+            min-width: 70px;
+            min-height: 30px;
+            width:  70px;
             height: 30px;
           }
           .good-name{
@@ -178,48 +167,65 @@
             margin-left: 10px;
           }
         }
-        .evaluate {
-          padding-bottom: 6px;
+        em {
+          position: absolute;
+          right: 0;
+          top: 0;
+        }
+      }
+      .goods_info{
+        .good-img {
+          display: block;
+          width: 170px;
+          height: 170px;
+          margin-right: 20px;
+        }
+        .good-txt {
+          width: calc(100% - 190px);
           position: relative;
-          padding-right: 68px;
-          img {
-            margin-left: 4px;
-            &:first-child {
-              margin-left: 0;
+          .evaluate {
+            padding-bottom: 6px;
+            position: relative;
+            padding-right: 68px;
+            img {
+              margin-left: 4px;
+              &:first-child {
+                margin-left: 0;
+              }
             }
           }
-        }
-        .shop-name {
-          padding-bottom: 4px;
-        }
-        .time {
-          padding-bottom: 8px;
-          span {
-            color: @sign;
-            border: 1px solid @sign;
-            padding: 2px;
-            .mixin-borderRadius(4px);
+          .shop-name {
+            padding-bottom: 4px;
           }
-        }
-        .price {
-          position: relative;
-          .left-txt {
+          .time {
+            padding-bottom: 8px;
             span {
-              position: relative;
-              em {
-                background: linear-gradient(to bottom, #fff 0%, #fff 28%, @Y2 30%, @Y2 100%);
-                padding-left: 2px;
-                padding-right: 6px;
-              }
-              .p-original {
-                padding-left: 12px;
-              }
+              color: @sign;
+              border: 1px solid @sign;
+              padding: 2px;
+              .mixin-borderRadius(4px);
             }
           }
-          .right-sold {
-            position: absolute;
-            right: 0;
-            top: 0;
+          .price {
+            position: relative;
+            .left-txt {
+              span {
+                position: relative;
+                em {
+                  background: linear-gradient(to bottom, #fff 0%, #fff 28%, @Y2 30%, @Y2 100%);
+                  padding-left: 2px;
+                  padding-right: 6px;
+                }
+                .p-original {
+                  padding-left: 12px;
+                }
+              }
+            }
+            .right-sold {
+              position: absolute;
+              right: 0;
+              top: 0;
+            }
           }
         }
       }

@@ -140,7 +140,7 @@
             this.$router.push({path:'/feedback'})
           }else if(id===6){
             clearLocalData('user_info');
-            this.$router.push('/login')
+            this.$router.push('/Login')
           }
         },
         getShopStatus(){//获取商铺申请状态

@@ -88,7 +88,7 @@
         getMerchantsInfo(){
           let params={
             id:this.user_info.merchants_id,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.merchantsInfo(params).then(res=>{
             this.merchant_info=res.data.data;
@@ -107,7 +107,7 @@
             id:String(this.merchant_info.id),//商铺ID
             merchants_user_id:String(this.user_info.id),//当前操作用户ID
             merchants_status:String(status),//营业状态(1为营业  0为休息)
-            timeStamp:this.timeStamp,//当前时间
+            timeStamp:formatDateTime(new Date()),//当前时间
           };
           request.editMerchantsStatus(params).then(res=>{
             if(res.data.code===200){

@@ -87,20 +87,27 @@
           </div>
         </div>
         <div class="e_f officalField" v-show="good_info.is_official==1">
-          活动时间：{{good_info.merchants_goods_field_time}}
+          开始时间：{{good_info.merchants_goods_field_time}}
         </div>
         <!--参加的人数-->
         <div class="join_num border_bot">
           <div class="join c-a">
             <div class="title">
               <em class="red_bg"><img class="mixin-center" src="../../assets/images/detail/icon_member.png"/></em>
-              <span>{{good_info.participate_num}}个人参加</span>
+              <span v-if="good_info.merchants_goods_type==2&&good_info.is_official==0">{{fieldUser.length}}个人参加</span>
+              <span v-else>{{good_info.participate_num}}个人参加</span>
+              <span v-if="good_info.is_official==1" class="min_person e_f">最低满{{good_info.merchants_goods_min_pople}}人开团</span>
             </div>
             <!--<span class="mixin-right c-b">查看详情</span>-->
           </div>
           <div class="people">
             <scroller @touchmove.prevent lock-y scrollbar-x :bounce=false height="64px">
-              <div class="partHeadImg" ref="partHeadImg">
+              <div v-if="good_info.merchants_goods_type==2&&good_info.is_official==0" class="partHeadImg" ref="partHeadImg">
+                <div class="item" v-for="(item,index) in fieldUser" @click="toUserInfo(item.goods_order_user_id)">
+                  <img class="mixin-img" :src="imgUrl(item.head_img)" />
+                </div>
+              </div>
+              <div v-else class="partHeadImg" ref="partHeadImg">
                 <div class="item" v-for="(item,index) in good_info.AlreadyUser" @click="toUserInfo(item.goods_order_user_id)">
                   <img class="mixin-img" :src="imgUrl(item.head_img)" />
                 </div>
@@ -116,7 +123,7 @@
               <em class="red_bg"><img class="mixin-center" src="./images/icon_comment.png"/></em>
               <span class="c-a">评价</span>
             </div>
-            <span class="mixin-right c-b">查看详情</span>
+            <span class="mixin-right c-b" @click="toComMore">查看详情</span>
           </div>
           <ul class="comment_list">
             <li class="comment_item" v-for="(item,index) in comment_list" :key="index">
@@ -130,14 +137,13 @@
               <div class="mid_text c-a">{{item.comment_content}}</div>
               <div class="down_imgs">
                 <ul class="img_wrap">
-                  <li class="img_item" v-if="item.comment_img" v-for="(val,key) in item.comment_images" @click="show(key,index)" :key="key">
-                    <img class="previewer-img" :src="imgUrl(val.msrc)"/>
+                  <li class="img_item" v-if="item.comment_img" v-for="(val,key) in item.comment_images" :key="key">
+                    <img class="previewer-img" :preview="index"  :preview-text="item.comment_content" :src="imgUrl(val)"/>
                   </li>
                 </ul>
                 <!--放大图片组件-->
-                <div v-transfer-dom>
-                  <previewer :list="item.comment_images" ref="previewer" :options="options" @on-index-change="logIndexChange"></previewer>
-                </div>
+                <!--<div v-transfer-dom  v-if="item.comment_img">-->
+                <!--</div>-->
               </div>
             </li>
           </ul>
@@ -279,20 +285,11 @@
         coupon_list: [],//卡券列表
         coupon_data: [],//卡券数据
         defaultImg: 'this.src="' + require('@/assets/images/default_img.png') + '"',//默认图片
-        timeStamp:formatDateTime(new Date()),//时间戳
         Countdown:{day:0,hour:0,minute:0,second:0},//倒计时
         show_index:null,
         spell_field:'',
         spellDate:'',
         weekDay:'',
-        options: {
-          getThumbBoundsFn (index) {
-            let thumbnail = document.querySelectorAll('.previewer-img')[index];
-            let pageYScroll = window.pageYOffset || document.documentElement.scrollTop;
-            let rect = thumbnail.getBoundingClientRect();
-            // return {x: rect.left, y: rect.top + pageYScroll, w: rect.width}
-          }
-        },//photoswipe的设置
         comment_list:[],
         show_voucher:false,
         show_guide:false,
@@ -310,7 +307,8 @@
           {id:'1139',img:require('@/assets/images/common/sport.png'),color:'#16d37d'},
           {id:'1140',img:require('@/assets/images/common/travel.png'),color:'#3884eb'}
         ],
-        realInfo:{}
+        realInfo:{},
+        fieldUser:[],
       }
     },
     watch:{
@@ -390,7 +388,7 @@
           user_id:this.user_info.id,
           update_class:cate,
           update_content:content,
-          timeStamp:this.timeStamp
+          timeStamp:formatDateTime(new Date())
         };
         request.updateUserInfo(params).then(res=>{
           this.show_notice=true;
@@ -422,7 +420,7 @@
         wxShare(options,this.callback);
         // let params={
         //   category_id:this.good_info.merchants_goods_category,
-        //   timeStamp:this.timeStamp
+        //   timeStamp:formatDateTime(new Date())
         // };
         // request.getUserShareSystem(params).then(res=>{
         //   let res_options = res.data.data;
@@ -451,10 +449,10 @@
         let params = {
           id:this.goods_id,
           choose_date:date,
-          timeStamp:this.timeStamp
+          timeStamp:formatDateTime(new Date())
         };
         request.getMerchantsGoodsFieldBuyUser(params).then(res=>{
-
+          this.fieldUser = res.data.data
         })
       },
       callback(){
@@ -468,7 +466,7 @@
         let params = {
           goods_id: String(that.goods_id),
           user_id: that.user_id,
-          timeStamp: this.timeStamp,
+          timeStamp: formatDateTime(new Date()),
         };
         request.getGoodsInfo(params).then(res => {
           let good_info = res.data.data;
@@ -505,7 +503,7 @@
         let params={
           id:this.goods_id,
           choose_date:date,
-          timeStamp:this.timeStamp
+          timeStamp:formatDateTime(new Date())
         };
         request.getMerchantsGoodsField(params).then(res=>{
           this.good_info.merchants_goods_available_time_arr=res.data.data;
@@ -514,7 +512,7 @@
       //获取优惠券列表
       getMerchantsCoupons(){
         let that = this;
-        let params={user_id:this.user_id,merchants_id:that.good_info.merchants_goods_merchants_id,timeStamp: that.timeStamp};
+        let params={user_id:this.user_id,merchants_id:that.good_info.merchants_goods_merchants_id,timeStamp: formatDateTime(new Date())};
         request.getMerchantsCoupons(params).then(res=>{
           this.coupon_list = res.data.data;
           this.coupon_data = res.data;
@@ -535,7 +533,7 @@
         let params={
           user_id:that.user_id,
           merchants_coupons_id:coupon_id,
-          timeStamp:that.timeStamp
+          timeStamp:formatDateTime(new Date())
         };
         request.userReceiveCoupons(params).then(res=>{
           this.noticeMsg=res.data.message;
@@ -546,46 +544,34 @@
       //获取商品评价列表
       getGfComments(){
         let that = this;
-        let params={ timeStamp:this.timeStamp };
+        let params={
+          limit_start:'0',
+          limit_end:'2',
+          timeStamp:formatDateTime(new Date())
+        };
         request.getGfGoodsComments(params).then(res=>{
           let comment_list = res.data.data;
-          let comment_images=[];
           comment_list.forEach((val,key)=>{
             if(val.comment_img){
-              val.comment_images=comment_images;
-              let comment_img = val.comment_img.split(',');
-              comment_img.forEach((item,index)=>{
-                comment_img.length===1?
-                  comment_images=[{src:that.imgUrl(item),msrc:that.imgUrl(item)}]:
-                  comment_images.push({src:that.imgUrl(item),msrc:that.imgUrl(item)})
-              });
-              val.comment_images=comment_images;
+              val.comment_images=val.comment_img.split(',');
             }
           });
           this.comment_list=comment_list;
-          console.log(this.comment_list,'this.comment_list')
+          this.$previewRefresh()
         })
       },
       getComments(){
         let that = this;
-        let params = {goods_id:this.goods_id,timeStamp:this.timeStamp};
+        let params = {goods_id:this.goods_id,timeStamp:formatDateTime(new Date())};
         request.getGoodsComments(params).then(res=>{
           let comment_list = res.data.data;
-          let comment_images=[];
           comment_list.forEach((val,key)=>{
             if(val.comment_img){
-              val.comment_images=comment_images;
-              let comment_img = val.comment_img.split(',');
-              comment_img.forEach((item,index)=>{
-                comment_img.length===1?
-                  comment_images=[{src:that.imgUrl(item),msrc:that.imgUrl(item)}]:
-                  comment_images.push({src:that.imgUrl(item),msrc:that.imgUrl(item)})
-              });
-              val.comment_images=comment_images;
+              val.comment_images = val.comment_img.split(',');
             }
           });
           this.comment_list=comment_list;
-          console.log(this.comment_list,'this.comment_list')
+          this.$previewRefresh()
         })
       },
       buyGoodsFn(params){
@@ -604,7 +590,7 @@
         let params = {
           goods_order_goods_id:that.good_info.id,
           goods_order_user_id:that.user_id,
-          timeStamp:that.timeStamp
+          timeStamp:formatDateTime(new Date())
         };
         if(that.good_info.is_official==1){
           that.spellDate = that.good_info.merchants_goods_field_time.split(" ")[0];
@@ -640,7 +626,7 @@
         let params = {
           goods_order_goods_id:that.good_info.id,
           goods_order_user_id:that.user_id,
-          timeStamp:that.timeStamp,
+          timeStamp:formatDateTime(new Date()),
           goods_order_goods_field:this.spell_field
         };
         this.buyGoodsFn(params)
@@ -679,12 +665,14 @@
           query:{available_time:JSON.stringify(weeks),end_time:end_time,start_time:start_time,good_id:that.goods_id}
         })
       },
-      // 放大图片
-      show (key,index) {
-        this.show_index=index;
-        this.$refs.previewer[index].show(key);
-      },
-      logIndexChange (arg) {
+      toComMore(){
+        this.$router.push({
+          path:'/comment',
+          query:{
+            is_off:this.good_info.is_official,
+            goods_id:this.goods_id
+          }
+        })
       },
       getQuery(){
         this.$route.query.date?this.spellDate=this.$route.query.date:this.spellDate=this.good_info.merchants_goods_available_time_now_day;
@@ -702,7 +690,6 @@
         });
       },
       setMap(lnglatXY){
-        console.log(lnglatXY);
         let that = this;
         map = new that.AMap.Map('mapWrap', {
           zoom:15,
@@ -741,7 +728,7 @@
     },
     created(){
       this.getGoodsInfo();
-
+      var dateNow = new Date().getTime();
       this.getInfo();
     },
     mounted() {
@@ -943,6 +930,10 @@
           margin-bottom: 23px;
           .title {
             display: flex;
+            align-items: center;
+            .min_person{
+              margin-left: 20px;
+            }
           }
         }
         .item {

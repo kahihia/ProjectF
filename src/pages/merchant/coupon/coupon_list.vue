@@ -96,7 +96,7 @@
         let params = {
           merchants_id:this.user_info.merchants_id,
           id:this.coupon_id,
-          timeStamp:this.timeStamp
+          timeStamp:formatDateTime(new Date())
         };
         request.deleteMerchantsCoupons(params).then(res=>{
           this.show_notice=true;
@@ -116,7 +116,7 @@
       },
       // 获取优惠券
       getCoupons(){
-        let params={merchants_id:this.user_info.merchants_id,timeStamp:this.timeStamp};
+        let params={merchants_id:this.user_info.merchants_id,timeStamp:formatDateTime(new Date())};
         request.getMerchantsCoupons(params).then(res=>{
           if(res.data.code===200){
             this.coupon_list=res.data.data;

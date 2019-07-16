@@ -37,8 +37,8 @@
             <em class="c-s get_all" @click="withdrawalAll">全部提现</em>
           </div>
         </div>
-        <button class="no_confirm" v-show="!can_confirm" @click="withdrawalMsg">预计2小时到账，确认提现</button>
-        <button class="confirm_wrap" v-show="can_confirm" @click="withdrawal">预计2小时到账，确认提现</button>
+        <button class="no_confirm" v-show="!can_confirm" @click="withdrawalMsg">预计24小时到账，确认提现</button>
+        <button class="confirm_wrap" v-show="can_confirm" @click="withdrawal">预计24小时到账，确认提现</button>
       </div>
       <div class="notice" v-transfer-dom>
         <popup v-model="show_notice" position="top" :show-mask="false">

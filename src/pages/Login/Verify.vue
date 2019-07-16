@@ -30,8 +30,10 @@
 <script>
   import request from '@/utils/request'
   import {formatDateTime} from '@/utils/format'
+  import {wx_grant} from '@/utils/wxInit'
   import {Toast} from 'vux'
   import {setLocalData,getLocalData,clearLocalData} from '@/utils/storages'
+  import {GetQueryString} from '@/utils/utils'
   import { Alert,TransferDomDirective as TransferDom} from 'vux';
     export default {
       name: "Verify",
@@ -48,6 +50,7 @@
           allow_send: true,//允许点击发送按钮
           alert_show: false,//显示隐藏提示弹窗
           alert_text: '',//提示弹窗提示内容
+          log:this.$route.query.log
         }
       },
       methods:{
@@ -116,14 +119,21 @@
                     that.$store.commit('updateLoadingStatus', {isLoading: false});
                     if (res.data.code == 200) {
                       setLocalData('user_info',res.data.data);
-                      that.$router.push({
-                        path: '/'
-                      })
+                      if(getLocalData('come_url').indexOf('good_id=') !== -1){
+                        window.location.href = getLocalData('come_url')
+                      }else {
+                        that.$router.push({
+                          path: '/'
+                        })
+                      }
                     }else {
                       this.alert_show=true;
                       this.alert_text=res.data.message;
                     }
                   })
+                }else {
+                  this.alert_show=true;
+                  this.alert_text=data.data.message;
                 }
               });
             }
@@ -131,6 +141,11 @@
         },
       },
       mounted(){
+        if(this.log=='logout'){
+          wx_grant().then(res=>{
+            console.log(res)
+          })
+        }
         this.$store.commit('updateBottomNav', {showBottomNav: false});
       },
       destroyed(){
@@ -149,13 +164,13 @@
       padding: 0 132px;
       .logo_box {
         text-align: center;
-        padding: 123px 0 153px 0;
+        padding: 42px 0;
       }
       .title{
         text-align: center;
       }
       .input_wrap{
-        margin-top: 228px;
+        margin-top: 120px;
         margin-bottom: 90px;
         .input_item{
           position: relative;

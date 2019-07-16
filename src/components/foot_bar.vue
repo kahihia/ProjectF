@@ -32,7 +32,7 @@
             {tab_img:require('./../assets/images/footer_icon/icon_home.png'),tab_label:'首页',path:'/'},
             {tab_img:require('./../assets/images/footer_icon/icon_location.png'),tab_label:'附近',show_dot:true,path:'/Nearby'},
             {tab_img:require('./../assets/images/footer_icon/icon_msg.png'),tab_label:'聊天',path:'/chat'},
-            {tab_img:require('./../assets/images/footer_icon/setting.png'),tab_label:'设置',path:'/options'},
+            {tab_img:require('./../assets/images/footer_icon/setting.png'),tab_label:'我的',path:'/options'},
             ],//用户端tab
           Tabbar_shop:[
             {tab_img:require('./../assets/images/footer_icon/icon_shop.png'),tab_label:'商铺',path:'/merchantHome'},

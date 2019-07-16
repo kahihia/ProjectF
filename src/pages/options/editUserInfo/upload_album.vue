@@ -67,7 +67,7 @@
       },
       methods:{
         getUserAlbum(){
-          let params = {user_id:this.user_info.id,timeStamp:this.timeStamp};
+          let params = {user_id:this.user_info.id,timeStamp:formatDateTime(new Date())};
           request.getUserPhotoAlbum(params).then(res=>{
             this.album_data = res.data.data;
           })
@@ -76,7 +76,7 @@
           let params = {
             merchants_id:String(this.user_info.merchants_id),
             is_merchants_get:String(1),
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.getMerchantsAlbum(params).then(res=>{
             this.album_data = res.data.data;
@@ -120,7 +120,7 @@
                   let add_params={
                     merchants_id:that.user_info.merchants_id,
                     img:img_src,
-                    timeStamp:that.timeStamp
+                    timeStamp:formatDateTime(new Date())
                   };
                   request.addMerchantsPhotoAlbum(add_params).then(res=>{
                     if(res.data.code===200){
@@ -177,7 +177,7 @@
           if(this.album_ids.length>0){
             let ids_str = this.album_ids.join(',');
             if(this.roles==='user'){
-              let params={id:ids_str,timeStamp:this.timeStamp};
+              let params={id:ids_str,timeStamp:formatDateTime(new Date())};
               request.deleteUserPhotoAlbum(params).then(res=>{
                 if(res.data.code==200){
                   this.cancelEdit();
@@ -191,7 +191,7 @@
               let params={
                 merchants_id:this.user_info.merchants_id,
                 id:ids_str,
-                timeStamp:this.timeStamp
+                timeStamp:formatDateTime(new Date())
               };
               request.deleteMerchantsPhotoAlbum(params).then(res=>{
                 this.cancelEdit();

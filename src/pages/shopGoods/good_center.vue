@@ -27,23 +27,32 @@
           <li v-show="goods_list.length>0" :class="item.merchants_goods_status==2? 'card good_item':'card_nd good_item'"
               v-for="(item,index) in goods_list" @touchstart="showDeleteButton" @touchend="clearLoop(item.id)">
             <div class="left_wrap">
-              <div class="good_img"><img class="mixin-img" :src="imgUrl(item.merchants_goods_img[0])"></div>
-              <div class="goods_info">
-                <p class="good_name ellipsis t-b-b">{{item.merchants_goods_name}}</p>
-                <div class="evaluate">
-                  <img v-for="i in item.merchants_goods_comments_star_level" src="@/assets/images/icon/icon_star.png"/>
-                  <span class="c-b" v-if="item.merchants_goods_comments_star_level==0">暂无评价</span>
+              <div class="name t-b c-Bd">
+                <div class="identification">
+                  <img v-show="item.is_official==1" class="ident-img" src="@/assets/images/common/findif.png">
+                  <img v-show="item.merchants_goods_type==2&&item.is_official==0" class="ident-img" src="@/assets/images/common/spell.png">
+                  <p class="ellipsis good-name">{{item.merchants_goods_name}}</p>
                 </div>
-                <p class="merchant_name c-a">{{item.merchants_name}}</p>
-                <p class="time_slot c-a">
-                  {{item.merchants_goods_available_time}}
-                  <span v-if="item.signEndTime==1">最后一天</span>
-                </p>
-                <div class="price_wrap">
+              </div>
+              <div class="left_info">
+                <div class="good_img"><img class="mixin-img" :src="imgUrl(item.merchants_goods_img[0])"></div>
+                <div class="goods_info">
+                  <!--<p class="good_name ellipsis t-b-b">{{item.merchants_goods_name}}</p>-->
+                  <div class="evaluate">
+                    <img v-for="i in item.merchants_goods_comments_star_level" src="@/assets/images/icon/icon_star.png"/>
+                    <span class="c-b" v-if="item.merchants_goods_comments_star_level==0">暂无评价</span>
+                  </div>
+                  <p class="merchant_name c-a">{{item.merchants_name}}</p>
+                  <p class="time_slot c-a">
+                    {{item.merchants_goods_available_time}}
+                    <span v-if="item.signEndTime==1">最后一天</span>
+                  </p>
+                  <div class="price_wrap">
                   <span class="t-b-b">
                     ¥<em :class="item.merchants_goods_status==2?'up':'down'">{{item.merchants_goods_discount_price}}</em>
                   </span>
-                  <em class="p-original c-Bc">原价 ¥{{item.merchants_goods_price}}</em>
+                    <em class="p-original c-Bc">原价 ¥{{item.merchants_goods_price}}</em>
+                  </div>
                 </div>
               </div>
             </div>
@@ -52,7 +61,6 @@
               <button class="btn" v-show="item.merchants_goods_status==3|item.merchants_goods_status==1" @click="changeGoodsStatus(item.id,2)">上架</button>
               <button class="btn" v-show="item.merchants_goods_status==2" @click="changeGoodsStatus(item.id,3)">下架</button>
               <span v-show="item.merchants_goods_status==0" class="c-q">待审核</span>
-              <em class="mark" v-show="item.merchants_goods_type==2">团</em>
             </div>
           </li>
           <li class="c-b mixin-center" v-show="goods_list.length==0">{{goods_data.message}}</li>
@@ -128,7 +136,7 @@
           let params={
             merchants_goods_merchants_id:getLocalData('user_info').merchants_id,
             is_merchants_get:status?String(status):null,
-            timeStamp:this.timeStamp,
+            timeStamp:formatDateTime(new Date()),
             merchants_goods_status:String(index)
           };
           index?true:delete params.merchants_goods_status;
@@ -164,7 +172,7 @@
           let params={
             id:goods_id,
             merchants_goods_status:status,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.changeGoodsStatus(params).then(res=>{
             if(res.data.code==200){
@@ -176,7 +184,7 @@
         getMerchantsBill(){
           let params={
             merchants_id:this.user_info.merchants_id,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.getMerchantsBill(params).then(res=>{
             this.merchants_bill=res.data.data
@@ -255,41 +263,62 @@
             display: flex;
             justify-content: space-between;
             .left_wrap{
-              display: flex;
-              .good_img{
-                width: 96px;
-                height: 96px;
-                margin-right: 20px;
+              .name{
+                margin-bottom: 20px;
+                .identification{
+                  display: flex;
+                  align-items: center;
+                  .ident-img{
+                    min-width: 70px;
+                    min-height: 30px;
+                    width:  70px;
+                    height: 30px;
+                  }
+                  .good-name{
+                    max-width: 85%;
+                    margin-left: 10px;
+                  }
+                }
               }
-              .goods_info{
-                .good_name{
-                  font-size: 24px;
-                  margin-bottom: 4px;
+              .left_info{
+                display: flex;
+                .good_img{
+                  width: 96px;
+                  height: 96px;
+                  margin-right: 20px;
+                  overflow: hidden;
                 }
-                .evaluate{
-                  margin-bottom: 11px;
-                }
-                .merchant_name{
-                  margin-bottom: 6px;
-                }
-                .time_slot{
-                  margin-bottom: 8px;
-                }
-                .price_wrap {
-                  span {
-                    position: relative;
-                    .up {
-                      background: linear-gradient(to bottom, @bg-c 0%, @bg-c 28%, @Y2 30%, @Y2 100%);
-                      padding-left: 2px;
-                      padding-right: 6px;
-                    }
-                    .down {
-                      background: linear-gradient(to bottom, @bg-f 0%, @bg-f 28%, @Y2 30%, @Y2 100%);
-                      padding-left: 2px;
-                      padding-right: 6px;
-                    }
-                    .p-original {
-                      padding-left: 12px;
+                .goods_info{
+                  flex: 1;
+                  .good_name{
+                    font-size: 24px;
+                    margin-bottom: 4px;
+                  }
+                  .evaluate{
+                    margin-bottom: 11px;
+                  }
+                  .merchant_name{
+                    margin-bottom: 6px;
+                  }
+                  .time_slot{
+                    margin-bottom: 8px;
+                  }
+                  .price_wrap {
+                    span {
+                      position: relative;
+                      .up {
+                        background: linear-gradient(to bottom, @bg-c 0%, @bg-c 28%, @Y2 30%, @Y2 100%);
+                        padding-left: 2px;
+                        padding-right: 6px;
+                      }
+                      .down {
+                        background: linear-gradient(to bottom, @bg-f 0%, @bg-f 28%, @Y2 30%, @Y2 100%);
+                        padding-left: 2px;
+                        padding-right: 6px;
+                      }
+                      .p-original {
+                        padding-left: 12px;
+                      }
                     }
                   }
                 }

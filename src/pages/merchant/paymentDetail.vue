@@ -79,7 +79,7 @@
           let params={
             user_id:this.user_id,
             bill_id:this.bill_id,
-            timeStamp:this.timeStamp,
+            timeStamp:formatDateTime(new Date()),
           };
           request.getUserBillInfo(params).then(res=>{
             this.billInfo=res.data.data
@@ -89,7 +89,7 @@
           let params={
             merchants_id:this.merchants_id,
             bill_id:this.bill_id,
-            timeStamp:this.timeStamp
+            timeStamp:formatDateTime(new Date())
           };
           request.getMerchantsBillInfo(params).then(res=>{
             this.billInfo=res.data.data

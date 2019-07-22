@@ -415,7 +415,7 @@
           title:this.good_info.merchants_goods_name, // 分享标题
           info:this.good_info.merchants_goods_share_desc,//分享描述
           newUrl:'https://www.findif.cn/webapp/index.html?good_id='+this.goods_id+'&distance='+this.$route.query.distance,
-          img:"https://www.findif.cn/Upload/2018/11/28/5bfe554c5fd0f.png"
+          img:"https://www.findif.cn/Upload/2019/07/12/5d286cab80c4a.png"
         };
         wxShare(options,this.callback);
         // let params={

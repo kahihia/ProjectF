@@ -5,14 +5,18 @@
   "author": "ProjectH_xiangTY <1258390473@qq.com>",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev",
-    "build": "node build/build.js"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "start": "node server.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
     "better-scroll": "^1.13.2",
     "compression-webpack-plugin": "^2.0.0",
+    "core-js": "^3.4.4",
+    "express": "^4.17.1",
+    "serve-static": "^1.14.1",
     "dateformat": "^3.0.3",
     "font-awesome": "^4.7.0",
     "js-base64": "^2.4.9",
@@ -32,6 +36,11 @@
     "weixin-js-sdk": "^1.3.3"
   },
   "devDependencies": {
+     "@vue/cli-plugin-babel": "^4.1.0",
+    "@vue/cli-plugin-eslint": "^4.1.0",
+    "@vue/cli-plugin-router": "^4.1.0",
+    "@vue/cli-service": "^4.1.0",
+    "@vue/eslint-config-prettier": "^5.0.0",
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
@@ -63,7 +72,9 @@
     "vue-loader": "^13.3.0",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.5.2",
-    "vux-loader": "^1.2.9",
+    "node-sass": "^4.12.0",
+    "prettier": "^1.19.1",
+    "sass-loader": "^8.0.0",
     "webpack": "^3.6.0",
     "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.1",
